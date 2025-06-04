@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf5011ffebfbe454e891020f0ed3e81c, type: 3}
+  m_Name: CharactersSelect
+  m_EditorClassIdentifier: 
+  list:
+  - characterAvatar: {fileID: 1265346787747520, guid: 7c70f757abfd77c46b496fdbf4ea841d, type: 3}
+    characterName: King Knight
+    characterTexture: {fileID: 8400000, guid: c2360d7b860242e4babf6a97ad882c9e, type: 2}
+  - characterAvatar: {fileID: 1370136899775164, guid: 770dc298fb7f1064d86804782c07d4e8, type: 3}
+    characterName: Captain Skullsunder
+    characterTexture: {fileID: 8400000, guid: 2e1ac6e75258c304a9e72c0799030c9b, type: 2}
+  - characterAvatar: {fileID: 1866232271259778, guid: a71c1899ba8135f4ba9d44d3365a5553, type: 3}
+    characterName: Ironhold Valgrin
+    characterTexture: {fileID: 8400000, guid: 2873ac48d1d85a94abfceea538bce7d4, type: 2}
+  - characterAvatar: {fileID: 1543441717367288, guid: 7122218656922504e845c0d10db8da0a, type: 3}
+    characterName: Silent Fang
+    characterTexture: {fileID: 8400000, guid: 66bf9e28e3054fd4cbf1dbce54dd5341, type: 2}
+  - characterAvatar: {fileID: 1022229092243494, guid: 3c48c989dc790114997c7757e4771ce6, type: 3}
+    characterName: Youngblood
+    characterTexture: {fileID: 8400000, guid: 9683d4d092aa24743bd9ae8682049fdc, type: 2}
