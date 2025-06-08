@@ -66,7 +66,8 @@ namespace TheRingDungeon.Scripts.Door_System
             isInitialized = true;
             
             if (showDebugInfo)
-                Debug.Log($"Door initialized. Is Door Closed: {isDoorClosed}, Front Trigger: {playerInFrontDoorTriggerArea}, Back Trigger: {playerInBackDoorTriggerArea}");
+                Debug.Log($"Door initialized. Is Door Closed: {isDoorClosed}, " + 
+                          $"Front Trigger: {playerInFrontDoorTriggerArea}, Back Trigger: {playerInBackDoorTriggerArea}");
         }
         
         private void Update()

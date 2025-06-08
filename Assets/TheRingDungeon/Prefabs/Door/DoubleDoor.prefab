@@ -300,6 +300,14 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.000000059604645
       objectReference: {fileID: 0}
+    - target: {fileID: 1119378791105128120, guid: fbfaefed9c8de504992ea1e44db04aaf, type: 3}
+      propertyPath: backDoorAreaTrigger
+      value: 
+      objectReference: {fileID: 1660035583229273176}
+    - target: {fileID: 1119378791105128120, guid: fbfaefed9c8de504992ea1e44db04aaf, type: 3}
+      propertyPath: frontDoorAreaTrigger
+      value: 
+      objectReference: {fileID: 3388965020495224764}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -378,6 +386,14 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.000000059604645
       objectReference: {fileID: 0}
+    - target: {fileID: 1868818366689671841, guid: 99ccc99de12ffe040be3b530f06e7eed, type: 3}
+      propertyPath: backDoorAreaTrigger
+      value: 
+      objectReference: {fileID: 1660035583229273176}
+    - target: {fileID: 1868818366689671841, guid: 99ccc99de12ffe040be3b530f06e7eed, type: 3}
+      propertyPath: frontDoorAreaTrigger
+      value: 
+      objectReference: {fileID: 3388965020495224764}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

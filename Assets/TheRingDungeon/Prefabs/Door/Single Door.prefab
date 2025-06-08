@@ -249,12 +249,11 @@ MonoBehaviour:
   door: {fileID: 962640970157964492}
   openRot: 90
   closeRot: 0
-  speed: 5
+  speed: 10
   isDoorClosed: 0
-  invertDirection: 0
   frontDoorAreaTrigger: {fileID: 3117209519116351356}
   backDoorAreaTrigger: {fileID: 8958551723497052895}
-  interactAction: {fileID: 141960817687136356, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
+  interactAction: {fileID: 3580746491695540281, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   showDebugInfo: 0
 --- !u!4 &962640970158340642 stripped
 Transform:
