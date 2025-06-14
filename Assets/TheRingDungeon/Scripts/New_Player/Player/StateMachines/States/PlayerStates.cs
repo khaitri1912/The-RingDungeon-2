@@ -7,7 +7,7 @@ public class PlayerStates : IState
     public Vector2 movementInput;
     public bool mouseClick;
 
-    protected float baseSpeed = 5f;
+    protected float baseSpeed = 20f;
     protected float speedModifier = 1f;
     protected Vector3 clickPos;
     protected float stopDistance = 0.5f;
@@ -50,41 +50,22 @@ public class PlayerStates : IState
 
     private void Move()
     {
-        if (movementInput == Vector2.zero || mouseClick == false)
+        if (movementInput == Vector2.zero /*|| mouseClick == false*/)
         {
             return;
         }
 
+        Vector3 moveDirection = GetMovementDirection();
+
         float moveSpeed = GetMovementSpeed();
 
-        if (mouseClick)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(movementInput);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-            {
-                clickPos = hit.point;
-                Debug.Log("Click position1: " + hit.point);
-                Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
-                stateMachine.Player.agent.SetDestination(hit.point);
-            }
-            else
-            {
-                Debug.Log("Raycast ko cham gi ca!");
-            }
-        }
-        else
-        {
-            Debug.Log("Click position2: " + clickPos);
-        }
+        Vector3 targetDirection = new Vector3 ( moveDirection.x, stateMachine.Player.transform.position.y, moveDirection.z );
 
-        if (mouseClick)
-        {
-            stateMachine.Player.transform.position = Vector3.MoveTowards(stateMachine.Player.transform.position, clickPos, moveSpeed * Time.deltaTime);
+        stateMachine.Player.transform.position = Vector3.MoveTowards(stateMachine.Player.transform.position, targetDirection, moveSpeed * Time.deltaTime);
 
-            if (Vector3.Distance(stateMachine.Player.transform.position, clickPos) < 0.1f)
-            {
-                mouseClick = false;
-            }
+        if (Vector3.Distance(stateMachine.Player.transform.position, targetDirection) < 0.1f)
+        {
+            mouseClick = false;
         }
     }
 
