@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 
     public Rigidbody Rigidbody { get; private set; }
 
-    public NavMeshAgent agent;
+    //public NavMeshAgent agent;
 
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        //agent = GetComponent<NavMeshAgent>();
         StateMachine.ChangeState(StateMachine.IdlingState);
     }
 
