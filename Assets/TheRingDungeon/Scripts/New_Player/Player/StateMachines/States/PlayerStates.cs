@@ -7,10 +7,9 @@ public class PlayerStates : IState
     public Vector2 movementInput;
     public bool mouseClick;
 
-    protected float baseSpeed = 20f;
+    protected float baseSpeed = 5f;
     protected float speedModifier = 1f;
-    protected Vector3 clickPos;
-    protected float stopDistance = 0.5f;
+    protected float rotationSpeed = 1000f;
 
     public PlayerStates(PlayerStateMachine playerStateMachine)
     {
@@ -34,23 +33,23 @@ public class PlayerStates : IState
 
     public void PhysicsUpdate()
     {
-        //Move();
+        Move();
     }
 
     public void Update()
     {
-        Move();
+        
     }
 
     private void ReadMouseInput()
     {
-        movementInput = stateMachine.Player.Inputs.playerActions.MousePos.ReadValue<Vector2>();
-        mouseClick = stateMachine.Player.Inputs.playerActions.Mouse.IsPressed();
+        movementInput = stateMachine.Player.Inputs.playerActions.Movement.ReadValue<Vector2>();
+
     }
 
     private void Move()
     {
-        if (movementInput == Vector2.zero /*|| mouseClick == false*/)
+        if (movementInput == Vector2.zero || speedModifier == 0f)
         {
             return;
         }
@@ -59,32 +58,18 @@ public class PlayerStates : IState
 
         float moveSpeed = GetMovementSpeed();
 
-        Vector3 targetDirection = new Vector3 ( moveDirection.x, stateMachine.Player.transform.position.y, moveDirection.z );
+        Vector3 currentHorizontalVelocity = GetPlayerHorizontalVelocity();
 
-        stateMachine.Player.transform.position = Vector3.MoveTowards(stateMachine.Player.transform.position, targetDirection, moveSpeed * Time.deltaTime);
+        Quaternion towardRotation = GetPlayerRotation(moveDirection);
 
-        if (Vector3.Distance(stateMachine.Player.transform.position, targetDirection) < 0.1f)
-        {
-            mouseClick = false;
-        }
+        stateMachine.Player.Rigidbody.AddForce(moveSpeed * 1f * moveDirection - currentHorizontalVelocity, ForceMode.VelocityChange);
+
+        stateMachine.Player.transform.rotation = Quaternion.RotateTowards(stateMachine.Player.transform.rotation, towardRotation, rotationSpeed * Time.deltaTime);
     }
 
-    private Vector3 GetMovementDirection()
+    protected Vector3 GetMovementDirection()
     {
-        if (mouseClick)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(movementInput);
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                clickPos = hit.point;
-                Debug.Log("Click position1: " + clickPos);
-            }
-        }
-        else
-        {
-            Debug.Log("Click position2: " + clickPos);
-        }
-        return clickPos;
+        return new Vector3(movementInput.x, 0f, movementInput.y);   
     }
 
     protected float GetMovementSpeed()
@@ -97,5 +82,13 @@ public class PlayerStates : IState
         Vector3 playerHorizontalVelocity = stateMachine.Player.Rigidbody.linearVelocity;
         playerHorizontalVelocity.y = 0f;
         return playerHorizontalVelocity;
+    }
+
+    protected Quaternion GetPlayerRotation(Vector3 movementDirection)
+    {
+        
+        Quaternion baseRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+        Quaternion mainRotation = baseRotation * Quaternion.Euler(0f, 180f, 0f);
+        return mainRotation;
     }
 }
