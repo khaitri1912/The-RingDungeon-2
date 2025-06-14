@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerStates : IState
 {
@@ -16,32 +17,52 @@ public class PlayerStates : IState
         stateMachine = playerStateMachine;
     }
 
-    public void Enter()
+    #region IState Methods
+    public virtual void Enter()
     {
         Debug.Log("State: " + GetType().Name);
+
+        AddInputActionsCallBack();
     }
 
-    public void Exit()
+    public virtual void Exit()
     {
-        
+        RemoveInputActionsCallBack();
     }
 
-    public void HandleInput()
+    public virtual void HandleInput()
     {
-        ReadMouseInput();
+        ReadMovementInput();
     }
 
-    public void PhysicsUpdate()
+    public virtual void PhysicsUpdate()
     {
         Move();
     }
 
-    public void Update()
+    public virtual void Update()
     {
         
     }
 
-    private void ReadMouseInput()
+    public virtual void OnAnimationEnterEvent()
+    {
+        
+    }
+
+    public virtual void OnAnimationExitEvent()
+    {
+        
+    }
+
+    public virtual void OnAnimationTransitionEvent()
+    {
+        
+    }
+    #endregion
+
+    #region Main Methods
+    private void ReadMovementInput()
     {
         movementInput = stateMachine.Player.Inputs.playerActions.Movement.ReadValue<Vector2>();
 
@@ -91,4 +112,29 @@ public class PlayerStates : IState
         Quaternion mainRotation = baseRotation * Quaternion.Euler(0f, 180f, 0f);
         return mainRotation;
     }
+
+    protected void ResetVelocity()
+    {
+        stateMachine.Player.Rigidbody.linearVelocity = Vector3.zero;
+    }
+    #endregion
+
+    #region Reusable Methods
+    protected virtual void AddInputActionsCallBack()
+    {
+        stateMachine.Player.Inputs.playerActions.Dash.started += OnDashStarted;
+    }
+
+    protected virtual void RemoveInputActionsCallBack()
+    {
+        stateMachine.Player.Inputs.playerActions.Dash.started -= OnDashStarted;
+    }
+    #endregion
+
+    #region Input Methods
+    protected virtual void OnDashStarted(InputAction.CallbackContext context)
+    {
+        stateMachine.ChangeState(stateMachine.DashingState);
+    }
+    #endregion
 }
