@@ -8,6 +8,9 @@ public class PlayerStateMachine : StateMachine
 
     public PlayerDashingState DashingState { get; }
 
+    public PlayerMediumStoppingState MedianStoppingState { get; }
+    public PlayerHardStoppingState HardStoppingState { get; }
+
     public PlayerStateMachine(Player player)
     {
         Player = player;
@@ -15,5 +18,8 @@ public class PlayerStateMachine : StateMachine
         IdlingState = new PlayerIdlingState(this);
         RunningState = new PlayerRunningState(this);
         DashingState = new PlayerDashingState(this);
+
+        MedianStoppingState = new PlayerMediumStoppingState(this);
+        HardStoppingState = new PlayerHardStoppingState(this);
     }
 }

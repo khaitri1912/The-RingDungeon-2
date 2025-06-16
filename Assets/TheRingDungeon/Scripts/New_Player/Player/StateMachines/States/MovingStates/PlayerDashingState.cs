@@ -19,10 +19,9 @@ public class PlayerDashingState : PlayerStates
 
     public override void OnAnimationTransitionEvent()
     {
-        base.OnAnimationTransitionEvent();
         if (movementInput == Vector2.zero)
         {
-            stateMachine.ChangeState(stateMachine.IdlingState); 
+            stateMachine.ChangeState(stateMachine.HardStoppingState); 
             return;
         }
     }
