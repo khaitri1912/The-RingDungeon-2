@@ -12,6 +12,8 @@ public class PlayerStates : IState
     protected float speedModifier = 1f;
     protected float rotationSpeed = 1000f;
 
+    public float movementDecelerationForce;
+
     public PlayerStates(PlayerStateMachine playerStateMachine)
     {
         stateMachine = playerStateMachine;
@@ -122,16 +124,40 @@ public class PlayerStates : IState
     #region Reusable Methods
     protected virtual void AddInputActionsCallBack()
     {
+        stateMachine.Player.Inputs.playerActions.Movement.canceled += OnMovementCanceled;
+
         stateMachine.Player.Inputs.playerActions.Dash.started += OnDashStarted;
     }
 
     protected virtual void RemoveInputActionsCallBack()
     {
+        stateMachine.Player.Inputs.playerActions.Movement.canceled -= OnMovementCanceled;
+
         stateMachine.Player.Inputs.playerActions.Dash.started -= OnDashStarted;
+    }
+
+    protected void DecelerateHorizontally()
+    {
+        Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
+
+        stateMachine.Player.Rigidbody.AddForce(-playerHorizontalVelocity * movementDecelerationForce, ForceMode.Acceleration);
+    }
+
+    protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f)
+    {
+        Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
+        Vector2 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.z);
+
+        return playerHorizontalMovement.magnitude > minimumMagnitude;
     }
     #endregion
 
     #region Input Methods
+    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+    {
+        
+    }
+
     protected virtual void OnDashStarted(InputAction.CallbackContext context)
     {
         stateMachine.ChangeState(stateMachine.DashingState);

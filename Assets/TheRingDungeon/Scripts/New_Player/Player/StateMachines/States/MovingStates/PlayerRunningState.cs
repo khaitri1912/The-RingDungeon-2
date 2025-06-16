@@ -15,8 +15,23 @@ public class PlayerRunningState : PlayerStates
         speedModifier = 1f;
     }
 
+    public override void Update()
+    {
+        base.Update();
+
+        StopRunning();
+    }
+
+    private void StopRunning()
+    {
+        if (movementInput == Vector2.zero)
+        {
+            stateMachine.ChangeState(stateMachine.IdlingState); return;
+        }
+    }
+
     #region Reusable Methods
-    protected override void AddInputActionsCallBack()
+    /*protected override void AddInputActionsCallBack()
     {
         base.AddInputActionsCallBack();
 
@@ -26,13 +41,13 @@ public class PlayerRunningState : PlayerStates
     protected override void RemoveInputActionsCallBack()
     {
         stateMachine.Player.Inputs.playerActions.Movement.canceled -= OnMovementCanceled;
-    }
+    }*/
     #endregion
 
     #region Input Methods
-    protected void OnMovementCanceled(InputAction.CallbackContext context)
+    protected override void OnMovementCanceled(InputAction.CallbackContext context)
     {
-        stateMachine.ChangeState(stateMachine.IdlingState);
+        stateMachine.ChangeState(stateMachine.MedianStoppingState);
     }
     #endregion
 }
