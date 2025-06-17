@@ -17,11 +17,11 @@ namespace TheRingDungeon.Scripts.Door_System
         [SerializeField] private FrontDoorAreaTrigger frontDoorAreaTrigger; // Direct reference
         [SerializeField] private BackDoorAreaTrigger backDoorAreaTrigger; 
         
-        private bool playerInFrontDoorTriggerArea;
-        private bool playerInBackDoorTriggerArea;
+        private bool _playerInFrontDoorTriggerArea;
+        private bool _playerInBackDoorTriggerArea;
         
-        private bool isRotating;
-        private bool isInitialized;
+        private bool _isRotating;
+        private bool _isInitialized;
         
         [Header("Input System Reference")]
         [Tooltip("Reference to the Interact action")]
@@ -55,39 +55,39 @@ namespace TheRingDungeon.Scripts.Door_System
         
         private void Start()
         {
-            // Force an update of the area flags on start
+            // Force an update of the area flags on the start
             if (frontDoorAreaTrigger != null)
-                playerInFrontDoorTriggerArea = frontDoorAreaTrigger.isPlayerInFrontDoorArea;
+                _playerInFrontDoorTriggerArea = frontDoorAreaTrigger.isPlayerInFrontDoorArea;
                 
             if (backDoorAreaTrigger != null)
-                playerInBackDoorTriggerArea = backDoorAreaTrigger.isPlayerInBackDoorArea;
+                _playerInBackDoorTriggerArea = backDoorAreaTrigger.isPlayerInBackDoorArea;
                 
             // Now the door is fully initialized
-            isInitialized = true;
+            _isInitialized = true;
             
             if (showDebugInfo)
                 Debug.Log($"Door initialized. Is Door Closed: {isDoorClosed}, " + 
-                          $"Front Trigger: {playerInFrontDoorTriggerArea}, Back Trigger: {playerInBackDoorTriggerArea}");
+                          $"Front Trigger: {_playerInFrontDoorTriggerArea}, Back Trigger: {_playerInBackDoorTriggerArea}");
         }
         
         private void Update()
         {
             // Check for null references before accessing properties
             if (frontDoorAreaTrigger != null)
-                playerInFrontDoorTriggerArea = frontDoorAreaTrigger.isPlayerInFrontDoorArea;
+                _playerInFrontDoorTriggerArea = frontDoorAreaTrigger.isPlayerInFrontDoorArea;
                 
             if (backDoorAreaTrigger != null)
-                playerInBackDoorTriggerArea = backDoorAreaTrigger.isPlayerInBackDoorArea;
+                _playerInBackDoorTriggerArea = backDoorAreaTrigger.isPlayerInBackDoorArea;
                 
             // If the door is currently rotating, continue the rotation
-            if (isRotating && door != null) 
+            if (_isRotating && door != null) 
                 RotateDoor();
         }
 
         private void OnInteract(InputAction.CallbackContext context)
         {
             // Wait until the door is fully initialized
-            if (!isInitialized) 
+            if (!_isInitialized) 
             {
                 if (showDebugInfo)
                     Debug.Log("Door not yet initialized, skipping interaction");
@@ -97,8 +97,8 @@ namespace TheRingDungeon.Scripts.Door_System
             if (context.performed)
             {
                 if (showDebugInfo)
-                    Debug.Log($"Interact triggered. Front Trigger: {playerInFrontDoorTriggerArea}, " +
-                              $"Back Trigger: {playerInBackDoorTriggerArea}, Is Rotating: {isRotating}");
+                    Debug.Log($"Interact triggered. Front Trigger: {_playerInFrontDoorTriggerArea}, " +
+                              $"Back Trigger: {_playerInBackDoorTriggerArea}, Is Rotating: {_isRotating}");
                 
                 DoorInteract();
             }
@@ -127,7 +127,7 @@ namespace TheRingDungeon.Scripts.Door_System
             {
                 // Set exact rotation to avoid floating point imprecision
                 door.transform.localEulerAngles = targetRotation;
-                isRotating = false;
+                _isRotating = false;
                 
                 if (showDebugInfo)
                     Debug.Log($"Door rotation complete. Is Door Closed: {isDoorClosed}");
@@ -137,7 +137,7 @@ namespace TheRingDungeon.Scripts.Door_System
         private void DoorInteract()
         {
             // Only interact if the door isn't currently rotating
-            if (isRotating)
+            if (_isRotating)
             {
                 if (showDebugInfo)
                     Debug.Log("Door is already rotating, ignoring interaction");
@@ -145,10 +145,10 @@ namespace TheRingDungeon.Scripts.Door_System
             }
             
             // Check which side of the door the player is on
-            if (playerInFrontDoorTriggerArea || playerInBackDoorTriggerArea)
+            if (_playerInFrontDoorTriggerArea || _playerInBackDoorTriggerArea)
             {
                 isDoorClosed = !isDoorClosed;
-                isRotating = true;
+                _isRotating = true;
                 
                 if (showDebugInfo)
                     Debug.Log($"Front door interaction. Door is now {(isDoorClosed ? "closing" : "opening")}");

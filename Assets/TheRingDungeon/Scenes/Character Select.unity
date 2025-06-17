@@ -20657,7 +20657,6 @@ GameObject:
   - component: {fileID: 1926495220941683160}
   - component: {fileID: 1926495220941683161}
   - component: {fileID: 1926495220941683176}
-  - component: {fileID: 1926495220941683177}
   m_Layer: 5
   m_Name: Foreground
   m_TagString: Untagged
@@ -20745,20 +20744,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1926495220941683177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926495220941683172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fe8fddf19e10cb45826a32811b11a1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tab: 5
-  button: {fileID: 1926495220941683176}
 --- !u!224 &2121820045632451583
 RectTransform:
   m_ObjectHideFlags: 0
