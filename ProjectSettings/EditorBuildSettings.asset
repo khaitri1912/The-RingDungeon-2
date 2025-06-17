@@ -12,10 +12,10 @@ EditorBuildSettings:
     path: Assets/TheRingDungeon/Scene/MainMenuScene.unity
     guid: e4b2ea6bf6338934caeca193794d30d0
   - enabled: 1
-    path: Assets/TheRingDungeon/Scene/Character Select.unity
+    path: Assets/TheRingDungeon/Scenes/Character Select.unity
     guid: 5d989f69972d00b418908bfa4f8a1472
   - enabled: 1
-    path: Assets/TheRingDungeon/Scene/Tutorial.unity
+    path: Assets/TheRingDungeon/Scenes/Tutorial/Tutorial.unity
     guid: b1bfbd41e2e14e34aa7acebd9529c7b2
   - enabled: 1
     path: Assets/TheRingDungeon/Scene/PlayerMovement.unity
