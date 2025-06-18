@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerRunningState : PlayerStates
+public class PlayerRunningState : PlayerMovingState
 {
     public PlayerRunningState(PlayerStateMachine playerStateMachine) : base(playerStateMachine)
     {
@@ -12,7 +12,7 @@ public class PlayerRunningState : PlayerStates
     {
         base.Enter();
 
-        speedModifier = 1f;
+        stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
     }
 
     public override void Update()
@@ -24,30 +24,15 @@ public class PlayerRunningState : PlayerStates
 
     private void StopRunning()
     {
-        if (movementInput == Vector2.zero)
+        if (stateMachine.ReusableData.MovementInput == Vector2.zero)
         {
             stateMachine.ChangeState(stateMachine.IdlingState); return;
         }
     }
 
-    #region Reusable Methods
-    /*protected override void AddInputActionsCallBack()
-    {
-        base.AddInputActionsCallBack();
-
-        stateMachine.Player.Inputs.playerActions.Movement.canceled += OnMovementCanceled;
-    }
-
-    protected override void RemoveInputActionsCallBack()
-    {
-        stateMachine.Player.Inputs.playerActions.Movement.canceled -= OnMovementCanceled;
-    }*/
-    #endregion
-
-    #region Input Methods
     protected override void OnMovementCanceled(InputAction.CallbackContext context)
     {
         stateMachine.ChangeState(stateMachine.MedianStoppingState);
+        //base.OnMovementCanceled(context);
     }
-    #endregion
 }

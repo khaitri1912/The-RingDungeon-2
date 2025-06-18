@@ -10,6 +10,6 @@ public class PlayerMediumStoppingState : PlayerStoppingState
     {
         base.Enter();
 
-        movementDecelerationForce = 6.5f;
+        stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.MediumDecelerationForce;
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerIdlingState : PlayerStates
+public class PlayerIdlingState : PlayerGroundedState
 {
     public PlayerIdlingState(PlayerStateMachine playerStateMachine) : base(playerStateMachine)
     {
@@ -11,7 +11,7 @@ public class PlayerIdlingState : PlayerStates
     {
         base.Enter();
 
-        speedModifier = 0f;
+        stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
         ResetVelocity();
     }
@@ -20,16 +20,11 @@ public class PlayerIdlingState : PlayerStates
     {
         base.Update();
 
-        if (movementInput == Vector2.zero)
+        if (stateMachine.ReusableData.MovementInput == Vector2.zero)
         {
             return;
         }
 
         OnMove();
-    }
-
-    private void OnMove()
-    {
-        stateMachine.ChangeState(stateMachine.RunningState);
     }
 }

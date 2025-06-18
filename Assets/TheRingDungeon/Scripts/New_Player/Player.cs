@@ -8,9 +8,14 @@ public class Player : MonoBehaviour
     
     public PlayerStateMachine StateMachine;
 
+    [field: SerializeField] public PlayerSO Data { get; private set; }
+
     public PlayerInputs Inputs { get; private set; }
 
     public Rigidbody Rigidbody { get; private set; }
+
+    [field: SerializeField] public CapsuleColliderUtility ColliderUtility { get; private set; }
+    [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
 
     private void Awake()
     {
@@ -28,6 +33,15 @@ public class Player : MonoBehaviour
         StateMachine = new PlayerStateMachine(this);
 
         Inputs = GetComponent<PlayerInputs>();
+
+        ColliderUtility.Initialize(gameObject);
+        ColliderUtility.CalculateCapsuleColliderDimensions();
+    }
+
+    private void OnValidate()
+    {
+        ColliderUtility.Initialize(gameObject);
+        ColliderUtility.CalculateCapsuleColliderDimensions();
     }
 
     private void Start()
