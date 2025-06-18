@@ -10,6 +10,6 @@ public class PlayerHardStoppingState : PlayerStoppingState
     {
         base.Enter();
 
-        movementDecelerationForce = 5f;
+        stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.HardDecelerationForce;
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerStoppingState : PlayerStates
+public class PlayerStoppingState : PlayerGroundedState
 {
     public float hardDecelerationForce = 5f;
 
@@ -13,7 +13,7 @@ public class PlayerStoppingState : PlayerStates
     {
         base.Enter();
 
-        speedModifier = 0f;
+        stateMachine.ReusableData.MovementSpeedModifier = 0f;
     }
 
     public override void PhysicsUpdate()
@@ -45,6 +45,11 @@ public class PlayerStoppingState : PlayerStates
     public override void OnAnimationTransitionEvent()
     {
         stateMachine.ChangeState(stateMachine.IdlingState);
+    }
+
+    protected override void OnMovementCanceled(InputAction.CallbackContext context)
+    {
+        
     }
 
     private void OnMovementStarted(InputAction.CallbackContext context)

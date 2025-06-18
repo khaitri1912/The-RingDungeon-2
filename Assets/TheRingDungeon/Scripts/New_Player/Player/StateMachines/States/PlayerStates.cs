@@ -5,25 +5,32 @@ public class PlayerStates : IState
 {
     protected PlayerStateMachine stateMachine;
 
-    public Vector2 movementInput;
     public bool mouseClick;
 
-    protected float baseSpeed = 5f;
-    protected float speedModifier = 1f;
+    protected PlayerGroundedData movementData;
     protected float rotationSpeed = 1000f;
 
-    public float movementDecelerationForce;
-
+    //public float movementDecelerationForce;
+    
     public PlayerStates(PlayerStateMachine playerStateMachine)
     {
         stateMachine = playerStateMachine;
+
+        movementData = stateMachine.Player.Data.GroundedData;
+
+        InitializeData();
+    }
+
+    private void InitializeData()
+    {
+        stateMachine.ReusableData.TimeToReachTargetRotation = movementData.BaseRotationData.TargetRotationReachTime;
     }
 
     #region IState Methods
     public virtual void Enter()
     {
         Debug.Log("State: " + GetType().Name);
-
+        
         AddInputActionsCallBack();
     }
 
@@ -66,13 +73,13 @@ public class PlayerStates : IState
     #region Main Methods
     private void ReadMovementInput()
     {
-        movementInput = stateMachine.Player.Inputs.playerActions.Movement.ReadValue<Vector2>();
+        stateMachine.ReusableData.MovementInput = stateMachine.Player.Inputs.playerActions.Movement.ReadValue<Vector2>();
 
     }
 
     private void Move()
     {
-        if (movementInput == Vector2.zero || speedModifier == 0f)
+        if (stateMachine.ReusableData.MovementInput == Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier == 0f)
         {
             return;
         }
@@ -92,12 +99,17 @@ public class PlayerStates : IState
 
     protected Vector3 GetMovementDirection()
     {
-        return new Vector3(movementInput.x, 0f, movementInput.y);   
+        return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);   
     }
 
     protected float GetMovementSpeed()
     {
-        return baseSpeed * speedModifier;
+        return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier * stateMachine.ReusableData.MovementOnSlopeSpeedModifier;
+    }
+
+    protected Vector3 GetPlayerVerticalVelocity()
+    {
+        return new Vector3(0f, stateMachine.Player.Rigidbody.linearVelocity.y, 0f);
     }
 
     protected Vector3 GetPlayerHorizontalVelocity()
@@ -124,23 +136,19 @@ public class PlayerStates : IState
     #region Reusable Methods
     protected virtual void AddInputActionsCallBack()
     {
-        stateMachine.Player.Inputs.playerActions.Movement.canceled += OnMovementCanceled;
-
-        stateMachine.Player.Inputs.playerActions.Dash.started += OnDashStarted;
+        
     }
 
     protected virtual void RemoveInputActionsCallBack()
     {
-        stateMachine.Player.Inputs.playerActions.Movement.canceled -= OnMovementCanceled;
-
-        stateMachine.Player.Inputs.playerActions.Dash.started -= OnDashStarted;
+        
     }
 
     protected void DecelerateHorizontally()
     {
         Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
 
-        stateMachine.Player.Rigidbody.AddForce(-playerHorizontalVelocity * movementDecelerationForce, ForceMode.Acceleration);
+        stateMachine.Player.Rigidbody.AddForce(-playerHorizontalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
     }
 
     protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f)
@@ -153,14 +161,6 @@ public class PlayerStates : IState
     #endregion
 
     #region Input Methods
-    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
-    {
-        
-    }
-
-    protected virtual void OnDashStarted(InputAction.CallbackContext context)
-    {
-        stateMachine.ChangeState(stateMachine.DashingState);
-    }
+    
     #endregion
 }
