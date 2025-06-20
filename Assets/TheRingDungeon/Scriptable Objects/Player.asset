@@ -66,6 +66,13 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <BaseRotationData>k__BackingField:
-      <TargetRotationReachTime>k__BackingField: {x: 0, y: 0.14, z: 0}
+      <TargetRotationReachTime>k__BackingField: {x: 0, y: 0.00001, z: 0}
     <RunData>k__BackingField:
       <SpeedModifier>k__BackingField: 1
+    <DashData>k__BackingField:
+      <SpeedModifier>k__BackingField: 2
+      <RotationData>k__BackingField:
+        <TargetRotationReachTime>k__BackingField: {x: 0, y: 0.02, z: 0}
+    <StopData>k__BackingField:
+      <MediumDecelerationForce>k__BackingField: 6.5
+      <HardDecelerationForce>k__BackingField: 5

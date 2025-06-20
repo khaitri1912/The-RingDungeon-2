@@ -11,9 +11,18 @@ public class PlayerIdlingState : PlayerGroundedState
     {
         base.Enter();
 
+        StartAnimation(stateMachine.Player.AnimationData.IdleParameterHash);
+
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
         ResetVelocity();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        StopAnimation(stateMachine.Player.AnimationData.IdleParameterHash);
     }
 
     public override void Update()
