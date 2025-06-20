@@ -23,7 +23,7 @@ public class PlayerStates : IState
 
     private void InitializeData()
     {
-        stateMachine.ReusableData.TimeToReachTargetRotation = movementData.BaseRotationData.TargetRotationReachTime;
+        SetBaseRotationData();
     }
 
     #region IState Methods
@@ -119,12 +119,61 @@ public class PlayerStates : IState
         return playerHorizontalVelocity;
     }
 
+    protected void RotateTowardsTargetRotation()
+    {
+        float currentYAngle = stateMachine.Player.Rigidbody.rotation.eulerAngles.y;
+
+        if (currentYAngle == stateMachine.ReusableData.CurrentTargetRotation.y)
+        {
+            return;
+        }
+
+        float smoothedYangle = Mathf.SmoothDampAngle(currentYAngle, stateMachine.ReusableData.CurrentTargetRotation.y, ref stateMachine.ReusableData.DampedTargetRotationCurrentVelocity.y, stateMachine.ReusableData.TimeToReachTargetRotation.y - stateMachine.ReusableData.DampedTargetRotationPassedTime.y);
+
+        stateMachine.ReusableData.DampedTargetRotationPassedTime.y += Time.deltaTime;
+
+        Quaternion targetrotation = Quaternion.Euler(0f, smoothedYangle, 0f);
+
+        stateMachine.Player.Rigidbody.MoveRotation(targetrotation);
+    }
+
     protected Quaternion GetPlayerRotation(Vector3 movementDirection)
     {
         
         Quaternion baseRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
         Quaternion mainRotation = baseRotation * Quaternion.Euler(0f, 180f, 0f);
         return mainRotation;
+    }
+
+    private float GetDirectionAngle(Vector3 direction)
+    {
+        float directionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+        if (directionAngle < 0f)
+        {
+            directionAngle += 360f;
+        }
+
+        return directionAngle;
+    }
+
+    private void UpdateTargetRotationData(float targetAngle)
+    {
+        stateMachine.ReusableData.CurrentTargetRotation.y = targetAngle;
+
+        stateMachine.ReusableData.DampedTargetRotationPassedTime.y = 0f;
+    }
+
+    protected float UpdateTargetRotation(Vector3 direction)
+    {
+        float directionAngle = GetDirectionAngle(direction);
+
+        if (directionAngle != stateMachine.ReusableData.CurrentTargetRotation.y)
+        {
+            UpdateTargetRotationData(directionAngle);
+        }
+
+        return directionAngle;
     }
 
     protected void ResetVelocity()
@@ -134,6 +183,23 @@ public class PlayerStates : IState
     #endregion
 
     #region Reusable Methods
+    protected void SetBaseRotationData()
+    {
+        stateMachine.ReusableData.RotationData = movementData.BaseRotationData;
+
+        stateMachine.ReusableData.TimeToReachTargetRotation = stateMachine.ReusableData.RotationData.TargetRotationReachTime;
+    }
+
+    protected void StartAnimation(int animationHash)
+    {
+        stateMachine.Player.Animator.SetBool(animationHash, true);
+    }
+
+    protected void StopAnimation(int animationHash)
+    {
+        stateMachine.Player.Animator.SetBool(animationHash, false);
+    }
+
     protected virtual void AddInputActionsCallBack()
     {
         

@@ -14,8 +14,12 @@ public class Player : MonoBehaviour
 
     public Rigidbody Rigidbody { get; private set; }
 
+    public Animator Animator { get; private set; }
+
     [field: SerializeField] public CapsuleColliderUtility ColliderUtility { get; private set; }
     [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
+
+    [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
 
     private void Awake()
     {
@@ -34,8 +38,12 @@ public class Player : MonoBehaviour
 
         Inputs = GetComponent<PlayerInputs>();
 
+        Animator = GetComponentInChildren<Animator>();
+
         ColliderUtility.Initialize(gameObject);
         ColliderUtility.CalculateCapsuleColliderDimensions();
+
+        AnimationData.Initialize();
     }
 
     private void OnValidate()
@@ -59,5 +67,20 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         StateMachine.PhysicUpdate();
+    }
+
+    public void OnMovementStateAnimationEnterEvent()
+    {
+        StateMachine.OnAnimationEnterEvent();
+    }
+
+    public void OnMovementStateAnimationExitEvent()
+    {
+        StateMachine.OnAnimationExitEvent();
+    }
+
+    public void OnMovementStateAnimationTransitionEvent()
+    {
+        StateMachine.OnAnimationTransitionEvent();
     }
 }

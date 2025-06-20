@@ -16,11 +16,35 @@ public class PlayerDashingState : PlayerGroundedState
     {
         base.Enter();
 
+        StartAnimation(stateMachine.Player.AnimationData.DashParameterHash);
+
         stateMachine.ReusableData.MovementSpeedModifier = _dashData.SpeedModifier;
+
+        stateMachine.ReusableData.RotationData = _dashData.RotationData;
 
         AddForceOnTransitionFromStationaryState();
 
         shouldKeepRotating = stateMachine.ReusableData.MovementInput != Vector2.zero;
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        //SetBaseRotationData();
+
+        StopAnimation(stateMachine.Player.AnimationData.DashParameterHash);
+    }
+
+    public override void PhysicsUpdate()
+    {
+        base.PhysicsUpdate();
+        if (!shouldKeepRotating)
+        {
+            return;
+        }
+
+        //RotateTowardsTargetRotation();
     }
 
     public override void OnAnimationTransitionEvent()
@@ -41,6 +65,8 @@ public class PlayerDashingState : PlayerGroundedState
 
         Vector3 characterRotationDirection = -stateMachine.Player.transform.forward;
         characterRotationDirection.y = 0f;
+
+        UpdateTargetRotation(characterRotationDirection);
 
         stateMachine.Player.Rigidbody.linearVelocity = characterRotationDirection * GetMovementSpeed();
     }

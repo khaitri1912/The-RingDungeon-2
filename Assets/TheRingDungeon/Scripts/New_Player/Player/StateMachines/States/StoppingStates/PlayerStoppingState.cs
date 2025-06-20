@@ -14,11 +14,22 @@ public class PlayerStoppingState : PlayerGroundedState
         base.Enter();
 
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
+        StartAnimation(stateMachine.Player.AnimationData.StoppingParameterHash);
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        StopAnimation(stateMachine.Player.AnimationData.StoppingParameterHash);
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+
+        //RotateTowardsTargetRotation();
 
         if (!IsMovingHorizontally())
         {
